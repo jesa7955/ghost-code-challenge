@@ -1,0 +1,2 @@
+kubectl apply -k https://github.com/CrunchyData/postgres-operator-examples/kustomize/install/namespace
+kubectl apply --server-side -k https://github.com/CrunchyData/postgres-operator-examples/kustomize/install/default

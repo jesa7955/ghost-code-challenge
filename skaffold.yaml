@@ -1,0 +1,55 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+
+build:
+  artifacts:
+  - image: jesa7955/backend
+    context: backend
+    sync:
+      manual:
+        - src: 'src/**/*.js' 
+          dest: .
+  - image: jesa7955/migration
+    context: migration
+    sync:
+      manual:
+        - src: 'src/**/*.js' 
+          dest: .
+
+deploy:
+  kustomize:
+    paths:
+      - k8s
+
+profiles:
+  - name: dev
+    activation:
+    - command: dev
+    build:
+      artifacts:
+      - image: jesa7955/backend
+        context: backend
+        docker:
+          buildArgs:
+            ENV: production
+        sync:
+          manual:
+          - src: 'src/**/*.js'
+            dest: .
+      - image: jesa7955/migration
+        context: migration
+        docker:
+          buildArgs:
+            ENV: production
+        sync:
+          manual:
+          - src: 'src/**/*.js'
+            dest: .
+
+
+portForward:
+  - resourceType: Service
+    resourceName: backend
+    port: 3000
+    address: 0.0.0.0
+    localPort: 3000
