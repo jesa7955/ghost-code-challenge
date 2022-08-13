@@ -27,3 +27,18 @@ spec:
         image: jesa7955/backend
         ports:
         - containerPort: 3000
+        env:
+        - name: DB_VENDOR
+          value: "postgres"
+        - name: DB_ADDR
+          valueFrom: { secretKeyRef: { name: database-pguser-database, key: host } }
+        - name: DB_PORT
+          valueFrom: { secretKeyRef: { name: database-pguser-database, key: port } }
+        - name: DB_DATABASE
+          valueFrom: { secretKeyRef: { name: database-pguser-database, key: dbname } }
+        - name: DB_USER
+          valueFrom: { secretKeyRef: { name: database-pguser-database, key: user } }
+        - name: DB_PASSWORD
+          valueFrom: { secretKeyRef: { name: database-pguser-database, key: password } }
+        - name: DB_COMMENTS_TABLE
+          value: "comments"
