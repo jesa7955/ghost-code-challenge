@@ -8,7 +8,7 @@ COPY --chown=node:node package* ./
 # examples don't use package-lock.json to minimize updates 
 RUN npm install --no-package-lock
 COPY --chown=node:node . .
-RUN npm run build
+RUN npm run build:prod
 
 EXPOSE 3000
 ARG ENV=production

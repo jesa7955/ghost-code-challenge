@@ -5,9 +5,6 @@ export type CommentType = {
   parentId?: number;
   content: string;
   upvote?: number;
-};
-
-export type CommentDatabaseType = CommentType & {
   createdAt?: Date;
   modifiedAt?: Date;
 };
@@ -29,7 +26,13 @@ export class CommentService {
   }
 
   async postComment(comment: CommentType) {
-    console.log("here");
     return this.databaseEngine(this.tableName).insert(comment);
+  }
+
+  async updateVote(id: number) {
+    return this.databaseEngine(this.tableName)
+      .where({ id })
+      .increment("upvote", 1)
+      .update("modifiedAt", new Date());
   }
 }
