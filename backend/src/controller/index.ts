@@ -19,10 +19,19 @@ export const postComment = async (req: Request, res: Response) => {
   });
 };
 
-export const updateVote = async (req: Request, res: Response) => {
+export const increaseVote = async (req: Request, res: Response) => {
   const { id } = req.body;
   commentServer
-    .updateVote(id)
+    .increaseVote(id)
+    .then(() =>
+      res.json({ status: `Success to update the vote of comment ${id}` })
+    );
+};
+
+export const decreaseVote = async (req: Request, res: Response) => {
+  const { id } = req.body;
+  commentServer
+    .decreaseVote(id)
     .then(() =>
       res.json({ status: `Success to update the vote of comment ${id}` })
     );

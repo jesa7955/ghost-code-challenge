@@ -5,16 +5,10 @@ build:
   artifacts:
   - image: jesa7955/backend
     context: backend
-    sync:
-      manual:
-        - src: 'src/**/*.js' 
-          dest: .
   - image: jesa7955/migration
     context: migration
-    sync:
-      manual:
-        - src: 'src/**/*.js' 
-          dest: .
+  - image: jesa7955/frontend
+    context: frontend
 
 deploy:
   kustomize:
@@ -32,24 +26,21 @@ profiles:
         docker:
           buildArgs:
             ENV: production
-        sync:
-          manual:
-          - src: 'src/**/*.js'
-            dest: .
       - image: jesa7955/migration
         context: migration
         docker:
           buildArgs:
             ENV: production
-        sync:
-          manual:
-          - src: 'src/**/*.js'
-            dest: .
-
+      - image: jesa7955/frontend
+        context: frontend
+        docker:
+          buildArgs:
+            ENV: production
 
 portForward:
-  - resourceType: Service
-    resourceName: backend
-    port: 3000
-    address: 0.0.0.0
-    localPort: 3000
+- resourceType: service
+  resourceName: ingress-nginx-controller
+  namespace: ingress-nginx
+  port: 80
+  address: 0.0.0.0
+  localPort: 8080

@@ -29,10 +29,17 @@ export class CommentService {
     return this.databaseEngine(this.tableName).insert(comment);
   }
 
-  async updateVote(id: number) {
+  async increaseVote(id: number) {
     return this.databaseEngine(this.tableName)
       .where({ id })
       .increment("upvote", 1)
+      .update("modifiedAt", new Date());
+  }
+
+  async decreaseVote(id: number) {
+    return this.databaseEngine(this.tableName)
+      .where({ id })
+      .decrement("upvote", 1)
       .update("modifiedAt", new Date());
   }
 }

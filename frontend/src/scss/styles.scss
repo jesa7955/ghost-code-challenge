@@ -1,0 +1,32 @@
+@import "~bootstrap/scss/bootstrap";
+
+.btn-primary {
+  background-color: $indigo-400;
+}
+
+.hr-solid {
+  border-top: 2px solid $gray-500;
+}
+
+.post-time-prompt {
+  color: $gray-500;
+  font-size: small;
+}
+
+.post-time-dot {
+  color: $gray-500;
+}
+
+.button-area {
+  font-size: small;
+  font-weight: bold;
+  color: $gray-600;
+}
+
+.comment-button,
+.reply-button {
+  color: $gray-600;
+  background-color: white;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}

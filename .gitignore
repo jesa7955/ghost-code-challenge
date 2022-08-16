@@ -1,3 +1,6 @@
 **/node_modules
 **/*sqlite3
-**/dist
+**/dist/**/*js
+**/dist/**/*map
+**/dist/**/*txt
+frontend/.env
