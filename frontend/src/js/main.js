@@ -32,31 +32,40 @@ const generateTimeString = (timestamp) => {
   )} weeks ago`;
 };
 
+const getUserNameAndIcon = (userId) => {
+  const hexCode = userId.toString(16).toLowerCase();
+  return {
+    userName: `Anonymous ${userId}`,
+    iconUrl: `https://raw.githubusercontent.com/googlefonts/noto-emoji/main/png/72/emoji_u${hexCode}.png`,
+  };
+};
+
 const generateHtmlForComment = (comment) => {
   const {
-    id, content, upvote, createdAt,
+    userId, commentId, content, upvote, createdAt,
   } = comment;
+  const { userName, iconUrl } = getUserNameAndIcon(userId);
   return `
       <div class="row pb-5">
         <div class="col-auto">
-          <img src="https://avatars.githubusercontent.com/u/7817026?v=4" width="38" height="38" class="rounded-circle">
+          <img src="${iconUrl}" width="38" height="38" class="rounded-circle">
         </div>
         <div class="col-11 flex-start">
           <div class="row gx-2 align-items-baseline">
-            <p class="col-auto fw-bold">Tong Li</p>
+            <p class="col-auto fw-bold">${userName}</p>
             <p class="col-auto post-time-dot">•</p>
             <p class="col-auto post-time-prompt pb-0">${generateTimeString(
     createdAt,
   )}</p>
           </div>
           <div class="row">
-            <p id="comment-content-${id}">${content}</p>
+            <p id="comment-content-${commentId}">${content}</p>
           </div>
           <div class="row button-area">
             <div class="col-auto">
               <div class="row gx-3 align-items-baseline">
-                <p class="col-auto" id="comment-upvote-${id}">${upvote}</p>
-                <button class="col-auto btn btn-light comment-button" id="comment-upvote-btn-${id}">Upvote</button>
+                <p class="col-auto" id="comment-upvote-${commentId}">${upvote}</p>
+                <button class="col-auto btn btn-light comment-button" id="comment-upvote-btn-${commentId}">Upvote</button>
               </div>
             </div>
           </div>
@@ -133,7 +142,21 @@ const updateVote = (event) => {
     });
 };
 
+const getUserId = () => {
+  $.ajax({
+    url: `${apiBaseUrl}/get_user`,
+    type: 'GET',
+    dataType: 'json',
+    async: false,
+  }).then((data) => {
+    const { userId } = data;
+    const { iconUrl } = getUserNameAndIcon(userId);
+    $('#user-icon').data('userId', userId).prop('src', iconUrl);
+  });
+};
+
 $(() => {
+  getUserId();
   displayComments();
   $('#comment-form').on('submit', (event) => {
     event.preventDefault();
@@ -143,7 +166,10 @@ $(() => {
       return null;
     }
     const now = new Date();
-    const comment = { content, createdAt: now, modifiedAt: now };
+    const userId = $('#user-icon').data('userId');
+    const comment = {
+      content, userId, createdAt: now, modifiedAt: now,
+    };
     formInput.val('');
     postComent(comment);
     return null;
@@ -154,7 +180,3 @@ $(() => {
     updateVote,
   );
 });
-
-window.setInterval(() => {
-  displayComments();
-}, 10000);

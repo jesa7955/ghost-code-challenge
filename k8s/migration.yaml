@@ -26,4 +26,6 @@ spec:
           valueFrom: { secretKeyRef: { name: database-pguser-database, key: password } }
         - name: DB_COMMENTS_TABLE
           value: "comments"
+        - name: DB_USERS_TABLE
+          value: "users"
       restartPolicy: OnFailure

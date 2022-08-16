@@ -1,11 +1,13 @@
 import { database } from "../database";
-import { CommentService } from "../post";
+import { CommentService, UserType } from "../post";
 import { Response, Request } from "express";
 import { CommentType } from "../post";
+import { getUser } from "../user";
 
 const commentServer = new CommentService(
   database,
-  process.env.DB_COMMENTS_TABLE
+  process.env.DB_COMMENTS_TABLE,
+  process.env.DB_USERS_TABLE
 );
 
 export const getComments = async (req: Request, res: Response) => {
@@ -13,7 +15,7 @@ export const getComments = async (req: Request, res: Response) => {
 };
 
 export const postComment = async (req: Request, res: Response) => {
-  const data: CommentType = req.body;
+  const data: CommentType & UserType = req.body;
   commentServer.postComment(data).then(() => {
     res.json({ status: "Success to insert a record" });
   });
@@ -35,4 +37,8 @@ export const decreaseVote = async (req: Request, res: Response) => {
     .then(() =>
       res.json({ status: `Success to update the vote of comment ${id}` })
     );
+};
+
+export const getUserId = async (req: Request, res: Response) => {
+  res.json({ userId: getUser() });
 };

@@ -9,6 +9,7 @@ declare global {
       DB_ADDR: string;
       DB_PORT: string;
       DB_COMMENTS_TABLE: string;
+      DB_USERS_TABLE: string;
     }
   }
 }
