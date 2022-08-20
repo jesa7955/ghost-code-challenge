@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@babel/core": "^7.18.10",
+    "babel-loader": "^8.2.5"
+  }
+}

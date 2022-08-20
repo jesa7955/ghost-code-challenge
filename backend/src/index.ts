@@ -2,9 +2,9 @@ import express, { NextFunction, Request, Response } from "express";
 import {
   getComments,
   postComment,
-  increaseVote,
-  decreaseVote,
   getUserId,
+  updateVote,
+  subscribeVoteUpdate,
 } from "./controller";
 
 const app = express();
@@ -19,7 +19,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 app.get("/api/get_comments", getComments);
 app.get("/api/get_user", getUserId);
 app.post("/api/post_comment", postComment);
-app.put("/api/increase_vote", increaseVote);
-app.put("/api/decrease_vote", decreaseVote);
+app.put("/api/update_vote", updateVote);
+app.get("/api/subscribe_vote_update", subscribeVoteUpdate);
 
 app.listen(port, () => console.log(`Listening on ${port}!`));

@@ -13,6 +13,11 @@ export type UserType = {
   userId: number;
 };
 
+export type VoteUpdateType = {
+  id: number;
+  amount: number;
+}
+
 export class CommentService {
   databaseEngine: Knex;
   commentTable: string;
@@ -34,7 +39,10 @@ export class CommentService {
         `${this.commentTable}.id`,
         "=",
         `${this.userTable}.commentId`
-      );
+      )
+      .orderBy([
+        {column: `${this.commentTable}.id`, order: 'desc'},
+      ]);
   }
 
   async postComment(data: CommentType & UserType) {
@@ -51,17 +59,10 @@ export class CommentService {
     });
   }
 
-  async increaseVote(id: number) {
+  async updateVote({id, amount}: VoteUpdateType) {
     return this.databaseEngine(this.commentTable)
       .where({ id })
-      .increment("upvote", 1)
-      .update("modifiedAt", new Date());
-  }
-
-  async decreaseVote(id: number) {
-    return this.databaseEngine(this.commentTable)
-      .where({ id })
-      .decrement("upvote", 1)
-      .update("modifiedAt", new Date());
+      .increment("upvote", amount)
+      .update({modifiedAt: new Date()}, ['id', 'upvote']);
   }
 }
