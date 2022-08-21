@@ -24,9 +24,11 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: jesa7955/frontend
+        image: rg.fr-par.scw.cloud/tongli/frontend
         ports:
         - containerPort: 3000
         env:
         - name: API_BASE_URL
           value: "http://backend:3000"
+      imagePullSecrets:
+        - name: registry-secret

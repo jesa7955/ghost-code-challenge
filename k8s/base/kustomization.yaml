@@ -3,7 +3,5 @@ kind: Kustomization
 
 resources:
   - backend.yaml
-  - database.yaml
   - migration.yaml
   - frontend.yaml
-  - ingress.yaml

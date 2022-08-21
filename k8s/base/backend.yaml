@@ -1,16 +1,32 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: v1
+kind: Service
 metadata:
-  name: migration
+  name: backend
 spec:
+  ports:
+  - port: 3000
+  type: LoadBalancer
+  selector:
+    app: backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  selector:
+    matchLabels:
+      app: backend
   template:
     metadata:
       labels:
-        app: migration
+        app: backend
     spec:
       containers:
-      - name: migration
-        image: jesa7955/migration
+      - name: backend
+        image: rg.fr-par.scw.cloud/tongli/backend
+        ports:
+        - containerPort: 3000
         env:
         - name: DB_VENDOR
           value: "postgres"
@@ -28,4 +44,5 @@ spec:
           value: "comments"
         - name: DB_USERS_TABLE
           value: "users"
-      restartPolicy: OnFailure
+      imagePullSecrets:
+        - name: registry-secret

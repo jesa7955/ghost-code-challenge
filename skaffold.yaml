@@ -3,44 +3,30 @@ kind: Config
 
 build:
   artifacts:
-  - image: jesa7955/backend
+  - image: rg.fr-par.scw.cloud/tongli/backend
     context: backend
-  - image: jesa7955/migration
+    docker:
+      buildArgs:
+        ENV: production
+  - image: rg.fr-par.scw.cloud/tongli/migration
     context: migration
-  - image: jesa7955/frontend
+    docker:
+      buildArgs:
+        ENV: production
+  - image: rg.fr-par.scw.cloud/tongli/frontend
     context: frontend
-
-deploy:
-  kustomize:
-    paths:
-      - k8s
+    docker:
+      buildArgs:
+        ENV: production
 
 profiles:
+  - name: cloud
+    deploy:
+      kustomize:
+        paths:
+          - k8s/cloud
   - name: dev
-    activation:
-    - command: dev
-    build:
-      artifacts:
-      - image: jesa7955/backend
-        context: backend
-        docker:
-          buildArgs:
-            ENV: production
-      - image: jesa7955/migration
-        context: migration
-        docker:
-          buildArgs:
-            ENV: production
-      - image: jesa7955/frontend
-        context: frontend
-        docker:
-          buildArgs:
-            ENV: production
-
-portForward:
-- resourceType: service
-  resourceName: ingress-nginx-controller
-  namespace: ingress-nginx
-  port: 80
-  address: 0.0.0.0
-  localPort: 8080
+    deploy:
+      kustomize:
+        paths:
+          - k8s/dev
