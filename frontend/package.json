@@ -3,13 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
-    "jquery": "^3.6.0",
-    "prettier": "^2.7.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,13 +18,35 @@
     "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.js src/**/*.jsx --fix"
   },
   "eslintConfig": {
+    "parser": "@babel/eslint-parser",
+    "plugins": [
+      "prettier"
+    ],
     "extends": [
+      "airbnb",
+      "eslint:recommended",
+      "plugin:react/recommended",
       "react-app",
-      "react-app/jest"
-    ]
+      "react-app/jest",
+      "prettier"
+    ],
+    "rules": {
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      ],
+      "prettier/prettier": "error",
+      "react/require-default-props": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -44,8 +61,16 @@
     ]
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.18.9",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
     "eslint": "^8.22.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-react": "^7.30.1"
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.30.1",
+    "install": "^0.13.0",
+    "prettier": "^2.7.1"
   }
 }

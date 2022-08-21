@@ -5,7 +5,11 @@
 }
 
 .hr-solid {
-  border-top: 2px solid $gray-500;
+  border-top: 2px solid $gray-300;
+}
+
+.vr-solid {
+  border-left: 4px solid $gray-300;
 }
 
 .post-time-prompt {
@@ -23,11 +27,22 @@
   color: $gray-600;
 }
 
-.comment-button,
-.reply-button {
-  color: $gray-600;
-  background-color: white;
+.upvote-count {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.title-text {
+  font-weight: 900;
+}
+
+.small-button {
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 900;
+}
+
+.comment-button {
+  color: $gray-600;
+  background-color: white;
 }

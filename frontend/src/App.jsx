@@ -24,15 +24,14 @@ function App() {
   }, [reloadFlag]);
   React.useEffect(() => {
     if (userInfo) {
-      console.log("Setting event source")
-      setEventSource(
-        new EventSource(
+      const targetEventSource = new EventSource(
         `${apiBaseUrl}/subscribe_vote_update?userId=${userInfo.userId}`
-      ));
-      return () => eventSource.close();
+      );
+      setEventSource(targetEventSource);
     }
+    return () => eventSource?.close();
   }, [userInfo]);
-  if (!userInfo) {
+  if (!userInfo || !eventSource) {
     return null;
   }
   return (
@@ -41,7 +40,7 @@ function App() {
         <ApiUrlContext.Provider value={apiBaseUrl}>
           <EventSourceContext.Provider value={eventSource}>
             <CommentPostForm />
-            <CommentList commentList={commentList}/>
+            <CommentList commentList={commentList} />
           </EventSourceContext.Provider>
         </ApiUrlContext.Provider>
       </ReloadCommentContext.Provider>

@@ -17,9 +17,11 @@ const generateTimeString = (timestamp) => {
     return `${Math.floor(secondPast / msInMin / minInHour)} hrs ago`;
   }
   if (secondPast < msInMin * minInHour * hourInDay * dayInWeek) {
-    return `${Math.floor(
-      secondPast / msInMin / minInHour / hourInDay
-    )} days ago`;
+    const days = Math.floor(secondPast / msInMin / minInHour / hourInDay);
+    if (days === 1) {
+      return "Yesterday";
+    }
+    return `${days} days ago`;
   }
   return `${Math.floor(
     secondPast / msInMin / minInHour / hourInDay / dayInWeek
@@ -31,20 +33,20 @@ const generateUserInfo = (userId) => {
   return {
     iconUrl: `https://raw.githubusercontent.com/googlefonts/noto-emoji/main/png/72/emoji_u${hexCode}.png`,
     userName: `Anonymous ${userId}`,
-  }
+  };
 };
 
-const postComent = (apiBaseUrl, comment, setReloadFlag) => {
+const postComment = (apiBaseUrl, comment, setReloadFlag) => {
   axios
     .post(`${apiBaseUrl}/post_comment`, comment)
     .then(() => setReloadFlag(new Date()))
-    .catch((error) => alert("failed to post comment: " + error.message));
+    .catch((error) => alert(`failed to post comment: ${error.message}`));
 };
 
 const updateVote = (apiBaseUrl, update) => {
   axios
     .put(`${apiBaseUrl}/update_vote`, update)
-    .catch((error) => alert("failed to update vote count: " + error.message));
+    .catch((error) => alert(`failed to update vote count: ${error.message}`));
 };
 
 const getUserInfo = (apiBaseUrl, setUserInfo) => {
@@ -53,7 +55,7 @@ const getUserInfo = (apiBaseUrl, setUserInfo) => {
     .then((res) => {
       setUserInfo(res.data);
     })
-    .catch((error) => alert("failed to get the uesr info: " + error.message));
+    .catch((error) => alert(`failed to get the uesr info: ${error.message}`));
 };
 
 const getComments = (apiBaseUrl, setCommentList) => {
@@ -64,13 +66,33 @@ const getComments = (apiBaseUrl, setCommentList) => {
         Object.assign(comment, {
           createdAt: new Date(comment.createdAt),
           modifiedAt: new Date(comment.modifiedAt),
+          children: [],
         })
       );
-      setCommentList(parsedCommentList);
+      const parents = new Map(
+        parsedCommentList
+          .filter((comment) => comment.parentId === null)
+          .map((comment) => [comment.commentId, comment])
+      );
+      parsedCommentList.forEach((comment) => {
+        const { parentId } = comment;
+        if (parentId != null) {
+          const parent = parents.get(parentId);
+          parent.children.push(comment);
+        }
+      });
+      setCommentList(Array.from(parents.values()));
     })
     .catch((error) => {
-      alert("failed to get comments: " + error.message);
+      alert(`failed to get comments: ${error.message}`);
     });
 };
 
-export { generateTimeString, postComent, updateVote, getUserInfo, getComments, generateUserInfo };
+export {
+  generateTimeString,
+  postComment,
+  updateVote,
+  getUserInfo,
+  getComments,
+  generateUserInfo,
+};
