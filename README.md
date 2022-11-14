@@ -1,4 +1,7 @@
-# ghost-code-challenge
+# Comments webapp
+
+## What is this repo about
+This is full stack web application purely in Javascript. It demostratesa simple comments system used in blog, which supports functionalities such as upvote, reply to comments. The app is powered by Kubernetes, which makes it easy to setup environment locally and deploy to any Kubernetes cloud vendor.
 
 ## Project Structure
 
